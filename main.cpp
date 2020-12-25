@@ -1,3 +1,4 @@
+// author:éƒ­èµŸ version:1.0 time:12/23/20
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -10,32 +11,32 @@
 
 using namespace std;
 
-/*@ ·ûºÅº¯Êısgn()
-@ m ÊäÈë²ÎÊı
+/*@ ç¬¦å·å‡½æ•°sgn()
+@ m è¾“å…¥å‚æ•°
 */
 int sgn(float m) {
 	if (m >= 0) return 1;
 	else return -1;
 }
 
-/*@ chunk½á¹¹Ìå(RIFFµÄ»ù±¾µ¥Ôª)
-@ file_size		 ÎÄ¼ş´óĞ¡
-@ channel		 Í¨µÀÊı
-@ frequency		 ²ÉÑùÆµÂÊ
-@ Bps			 ByteÂÊ
-@ sample_num_bit Ò»¸öÑù±¾µÄÎ»Êı
-@ data_size		 Êı¾İ´óĞ¡
-@ data		     ÒôÆµÊı¾İ
+/*@ chunkç»“æ„ä½“(RIFFçš„åŸºæœ¬å•å…ƒ)
+@ file_size		 æ–‡ä»¶å¤§å°
+@ channel		 é€šé“æ•°
+@ frequency		 é‡‡æ ·é¢‘ç‡
+@ Bps			 Byteç‡
+@ sample_num_bit ä¸€ä¸ªæ ·æœ¬çš„ä½æ•°
+@ data_size		 æ•°æ®å¤§å°
+@ data		     éŸ³é¢‘æ•°æ®
 */
 struct wav_struct
 {
-	unsigned long file_size;        //ÎÄ¼ş´óĞ¡
-	unsigned short channel;            //Í¨µÀÊı
-	unsigned long frequency;        //²ÉÑùÆµÂÊ
-	unsigned long Bps;                //ByteÂÊ
-	unsigned short sample_num_bit;    //Ò»¸öÑù±¾µÄÎ»Êı
-	unsigned long data_size;        //Êı¾İ´óĞ¡
-	unsigned char *data;            //ÒôÆµÊı¾İ 
+	unsigned long file_size;        //æ–‡ä»¶å¤§å°
+	unsigned short channel;            //é€šé“æ•°
+	unsigned long frequency;        //é‡‡æ ·é¢‘ç‡
+	unsigned long Bps;                //Byteç‡
+	unsigned short sample_num_bit;    //ä¸€ä¸ªæ ·æœ¬çš„ä½æ•°
+	unsigned long data_size;        //æ•°æ®å¤§å°
+	unsigned char *data;            //éŸ³é¢‘æ•°æ® 
 };
 
 
@@ -44,61 +45,61 @@ int main(int argc, char **argv)
 	fstream fs;
 	wav_struct WAV;
 
-	//Ò»¶Î²ÉÑùÆµÂÊ8000Hz,²ÉÑù¾«¶È16bit£¬Ê±³¤1000msµÄwavÒôÆµ
+	//ä¸€æ®µé‡‡æ ·é¢‘ç‡8000Hz,é‡‡æ ·ç²¾åº¦16bitï¼Œæ—¶é•¿1000msçš„wavéŸ³é¢‘
 	fs.open("D:\\test2.wav", ios::binary | ios::in);
 
 
-	fs.seekg(0, ios::end);						  //»ñµÃÎÄ¼ş´óĞ¡
+	fs.seekg(0, ios::end);						  //è·å¾—æ–‡ä»¶å¤§å°
 	WAV.file_size = fs.tellg();
 
-	fs.seekg(0x14);								  //Í¨µÀÊı
+	fs.seekg(0x14);								  //é€šé“æ•°
 	fs.read((char*)&WAV.channel, sizeof(WAV.channel));
 
-	fs.seekg(0x18);							      //²ÉÑùÆµÂÊ
+	fs.seekg(0x18);							      //é‡‡æ ·é¢‘ç‡
 	fs.read((char*)&WAV.frequency, sizeof(WAV.frequency));
 
-	fs.seekg(0x1c);								  //ByteÂÊ
+	fs.seekg(0x1c);								  //Byteç‡
 	fs.read((char*)&WAV.Bps, sizeof(WAV.Bps));
 
-	fs.seekg(0x22);								  //Ò»¸öÑù±¾µÄÎ»Êı
+	fs.seekg(0x22);								  //ä¸€ä¸ªæ ·æœ¬çš„ä½æ•°
 	fs.read((char*)&WAV.sample_num_bit, sizeof(WAV.sample_num_bit));
 
-	fs.seekg(0x28);								  //Êı¾İ´óĞ¡
+	fs.seekg(0x28);								  //æ•°æ®å¤§å°
 	fs.read((char*)&WAV.data_size, sizeof(WAV.data_size));
 
 	WAV.data = new unsigned char[WAV.data_size];  
 
 
-	fs.seekg(0x2c);								  //ÒôÆµÊı¾İ 
+	fs.seekg(0x2c);								  //éŸ³é¢‘æ•°æ® 
 	fs.read((char *)WAV.data, sizeof(char)*WAV.data_size);
 
-	cout << "ÎÄ¼ş´óĞ¡Îª  £º" << WAV.file_size << endl;
-	cout << "ÒôÆµÍ¨µÀÊı  £º" << WAV.channel << endl;
-	cout << "²ÉÑùÆµÂÊ    £º" << WAV.frequency << endl;
-	cout << "ByteÂÊ      £º" << WAV.Bps << endl;
-	cout << "Ñù±¾Î»Êı    £º" << WAV.sample_num_bit << endl;
-	cout << "ÒôÆµÊı¾İ´óĞ¡£º" << WAV.data_size << endl;
+	cout << "æ–‡ä»¶å¤§å°ä¸º  ï¼š" << WAV.file_size << endl;
+	cout << "éŸ³é¢‘é€šé“æ•°  ï¼š" << WAV.channel << endl;
+	cout << "é‡‡æ ·é¢‘ç‡    ï¼š" << WAV.frequency << endl;
+	cout << "Byteç‡      ï¼š" << WAV.Bps << endl;
+	cout << "æ ·æœ¬ä½æ•°    ï¼š" << WAV.sample_num_bit << endl;
+	cout << "éŸ³é¢‘æ•°æ®å¤§å°ï¼š" << WAV.data_size << endl;
 
-	//µÚnÖ¡ÓïÒôĞÅºÅXn(m)
+	//ç¬¬nå¸§è¯­éŸ³ä¿¡å·Xn(m)
 	vector<float> Xm;
 	vector<vector<float>> Xn;
 
-	//¶¨Òå´°º¯Êı(¾ØĞÎ´°)
-	//Ö¡³¤=20ms£¬Ö¡ÒÆ=0
-	//Ö¡Êı=1000ms/20ms=50Ö¡
-	//Ã¿Ö¡Ñù±¾Êı=16000/50=320
+	//å®šä¹‰çª—å‡½æ•°(çŸ©å½¢çª—)
+	//å¸§é•¿=20msï¼Œå¸§ç§»=0
+	//å¸§æ•°=1000ms/20ms=50å¸§
+	//æ¯å¸§æ ·æœ¬æ•°=16000/50=320
 
 	int num = 0;
 	for (unsigned long i = 0; i < WAV.data_size; i = i + 2)
 	{
 		num++;
-		//ÓÒ±ßÎª´ó¶Ë
+		//å³è¾¹ä¸ºå¤§ç«¯
 		unsigned long data_low = WAV.data[i];
 		unsigned long data_high = WAV.data[i + 1];
 		double data_true = data_high * 256 + data_low;
 		//printf("%d ",data_true);
 		long data_complement = 0;
-		//È¡´ó¶ËµÄ×î¸ßÎ»£¨·ûºÅÎ»£©
+		//å–å¤§ç«¯çš„æœ€é«˜ä½ï¼ˆç¬¦å·ä½ï¼‰
 		int my_sign = (int)(data_high / 128);
 
 		if (my_sign == 1)
@@ -114,7 +115,7 @@ int main(int argc, char **argv)
 		double float_data = (double)(data_complement / (double)32768);
 		//printf("%f ", float_data);
 
-		//·ÖÖ¡Óë¼Ó´°
+		//åˆ†å¸§ä¸åŠ çª—
 		Xm.push_back(float_data);
 		if (num == 320) {
 			Xn.push_back(Xm);
@@ -125,29 +126,29 @@ int main(int argc, char **argv)
 	fs.close();
 	delete[] WAV.data;
 	int n;
-	cout << "ÇëÊäÈë¼ÆËãÖ¡Êı(0~49)£º" << endl;
+	cout << "è¯·è¾“å…¥è®¡ç®—å¸§æ•°(0~49)ï¼š" << endl;
 	cin >> n;
 
-	//¼ÆËãµÚnÖ¡¶ÌÊ±ÄÜÁ¿
+	//è®¡ç®—ç¬¬nå¸§çŸ­æ—¶èƒ½é‡
 	float energy = 0;
 	for (int i = 0; i < 320; i++) {
 		energy += Xn[n][i] * Xn[n][i];
 	}
-	cout << "¶ÌÊ±ÄÜÁ¿£º" << energy << endl;
+	cout << "çŸ­æ—¶èƒ½é‡ï¼š" << energy << endl;
 
-	//¼ÆËãµÚnÖ¡¶ÌÊ±Æ½¾ù·ù¶È
+	//è®¡ç®—ç¬¬nå¸§çŸ­æ—¶å¹³å‡å¹…åº¦
 	float result = 0;
 	for (int m = 0; m < 320; m++) {
 		result += abs(Xn[n][m]);
 	}
-	cout << "¶ÌÊ±Æ½¾ù·ù¶È£º" << result / 320 << endl;
+	cout << "çŸ­æ—¶å¹³å‡å¹…åº¦ï¼š" << result / 320 << endl;
 
-	//¼ÆËãµÚnÖ¡¶ÌÊ±¹ıÁãÂÊ
+	//è®¡ç®—ç¬¬nå¸§çŸ­æ—¶è¿‡é›¶ç‡
 	float result1 = 0;
 	for (int k = 1; k < 320; k++) {
 		result1 += abs(sgn(Xn[n][k]) - sgn(Xn[n][k - 1]));
 	}
-	cout << "¶ÌÊ±¹ıÁãÂÊ£º" << result1 << endl;
+	cout << "çŸ­æ—¶è¿‡é›¶ç‡ï¼š" << result1 << endl;
 
 	system("pause");
 	return 0;
